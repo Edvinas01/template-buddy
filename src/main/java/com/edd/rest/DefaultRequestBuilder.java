@@ -73,7 +73,7 @@ public class DefaultRequestBuilder implements Request, PayloadRequest {
 
     @Override
     public <T> TypedRequest<T> expect(Class<T> type) {
-        return new Executor<>(new ParameterizedTypeReference<T>() {
+        return expect(new ParameterizedTypeReference<T>() {
 
             @Override
             public Type getType() {

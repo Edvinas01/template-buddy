@@ -11,6 +11,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.client.MockRestServiceServer;
 
+import java.util.Arrays;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.header;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
@@ -67,13 +69,18 @@ public class TemplateBuddyTest {
     }
 
     @Test
-    public void delete() {
-        server.expect(requestTo(BASE_URL))
-                .andExpect(method(HttpMethod.DELETE))
-                .andRespond(withSuccess());
+    public void noResponse() {
 
-        buddy.fromUrl(BASE_URL)
-                .delete();
+        // Setup multiple requests.
+        for (HttpMethod method : Arrays.asList(HttpMethod.GET, HttpMethod.POST, HttpMethod.DELETE)) {
+            server.expect(requestTo(BASE_URL))
+                    .andExpect(method(method))
+                    .andRespond(withSuccess());
+        }
+
+        buddy.fromUrl(BASE_URL).get();
+        buddy.fromUrl(BASE_URL).post();
+        buddy.fromUrl(BASE_URL).delete();
     }
 
     @Test
