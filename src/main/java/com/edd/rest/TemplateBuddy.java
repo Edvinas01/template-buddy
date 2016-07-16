@@ -1,4 +1,4 @@
-package com.edd.rest.buddy;
+package com.edd.rest;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.client.RestTemplate;

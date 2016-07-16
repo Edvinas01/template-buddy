@@ -1,4 +1,4 @@
-package com.edd.rest.buddy;
+package com.edd.rest;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

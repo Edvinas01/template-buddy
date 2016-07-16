@@ -1,4 +1,4 @@
-package com.edd.rest.buddy;
+package com.edd.rest;
 
 import com.edd.rest.api.PayloadRequest;
 import com.edd.rest.api.Request;
