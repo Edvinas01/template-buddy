@@ -1,23 +1,25 @@
 package com.edd.rest.buddy;
 
-import com.edd.rest.api.PathDecider;
-import com.edd.rest.api.RequestExecutor;
-import com.edd.rest.api.SimpleRequest;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Optional;
 
 public class TemplateBuddy extends RestTemplate {
 
-    public static PathDecider baseUrl(String baseUrl) {
+    private final HttpHeaders httpHeaders = new HttpHeaders();
 
-        return new PathDecider() {
+    /**
+     * Create request builder by specifying base url and url variables. Example:
+     *
+     * @param url          nonnull base url.
+     * @param uriVariables url variables.
+     * @return request builder.
+     */
+    public DefaultRequestBuilder fromUrl(String url, Object... uriVariables) {
+        return new DefaultRequestBuilder(this, url, uriVariables);
+    }
 
-            @Override
-            public SimpleRequest path(String path, Object... urlVariables) {
-                return null;
-            }
-        };
+    // todo replace by configuration
+    public HttpHeaders getHttpHeaders() {
+        return httpHeaders;
     }
 }

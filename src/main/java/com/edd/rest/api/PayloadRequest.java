@@ -1,10 +1,14 @@
 package com.edd.rest.api;
 
-/**
- * This interface describes a request which has a payload.
- */
-public interface PayloadRequest extends ExpectationDecider,
-        ConcreteRequestExecutor<Object>,
-        MethodDecider<Object> {
+import com.edd.rest.api.decider.MethodDecider;
+import com.edd.rest.api.decider.ResponseTypeDecider;
+import com.edd.rest.api.executor.ConcreteRequestExecutor;
 
+/**
+ * Intermediate interface which after selecting a payload allows to either execute concrete http request, or to
+ * continue building the request by providing a request method.
+ */
+public interface PayloadRequest extends ResponseTypeDecider,
+        ConcreteRequestExecutor,
+        MethodDecider {
 }

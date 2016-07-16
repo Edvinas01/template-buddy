@@ -1,13 +1,11 @@
-package com.edd.rest.api;
+package com.edd.rest.api.executor;
 
 import org.springframework.http.ResponseEntity;
 
-import java.util.Optional;
-
 /**
- * Interface which describes concrete http request execution.
+ * Executes concrete http requests, without the need of providing http method.
  *
- * @param <T> response type for requests.
+ * @param <T> response object type.
  */
 public interface ConcreteRequestExecutor<T> {
 
@@ -35,27 +33,27 @@ public interface ConcreteRequestExecutor<T> {
     /**
      * Perform http post request and extract the response object.
      *
-     * @return response object optional.
+     * @return object optional.
      */
-    default Optional<T> post() {
-        return Optional.ofNullable(postForEntity().getBody());
+    default T post() {
+        return postForEntity().getBody();
     }
 
     /**
      * Perform http get request and extract the response object.
      *
-     * @return response object optional.
+     * @return response object.
      */
-    default Optional<T> get() {
-        return Optional.ofNullable(getForEntity().getBody());
+    default T get() {
+        return getForEntity().getBody();
     }
 
     /**
      * Perform http delete request and extract response object.
      *
-     * @return response object optional.
+     * @return response object.
      */
-    default Optional<T> delete() {
-        return Optional.ofNullable(deleteForEntity().getBody());
+    default T delete() {
+        return deleteForEntity().getBody();
     }
 }

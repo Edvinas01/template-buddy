@@ -1,12 +1,14 @@
 package com.edd.rest.api;
 
-import org.springframework.http.HttpMethod;
+import com.edd.rest.api.decider.MethodDecider;
+import com.edd.rest.api.executor.ConcreteRequestExecutor;
 
 /**
- * Describes request which expects a specific response type.
+ * Intermediate interface with a set response type, which allows the selection of request method or a concrete
+ * http request execution.
  *
  * @param <T> excepted response type.
  */
-public interface TypedRequest<T> extends ConcreteRequestExecutor<T>, MethodDecider<T> {
-
+public interface TypedRequest<T> extends ConcreteRequestExecutor<T>,
+        MethodDecider<T> {
 }
