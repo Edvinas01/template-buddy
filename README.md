@@ -3,13 +3,13 @@ Template Buddy provides additional configuration features _(work in progress)_ a
 
 ## Build
 This library depends on [spring-boot-starter-web](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web).
-To build a runnable jar, navigate to project root directory and run.
+To build a runnable jar, navigate to project root directory and run the gradle `build` command using gradle wrapper.
 ```bash
 ./gradlew build
 ```
 
 ## Examples
-First create a `TemplateBuddy` bean somewhere in your Spring application.
+First create a `TemplateBuddy` bean or an instance somewhere in your application.
 ```java
 @Configuration
 public class TemplateBuddyConfiguration {
@@ -21,13 +21,13 @@ public class TemplateBuddyConfiguration {
 }
 ```
 
-Then in your service classes, reuse the created instance by injecting the bean.
+Reuse the created instance by injecting the bean.
 ```java
 @Autowired
 private TemplateBuddy templateBuddy;
 ```
 
-You can use the fluent api of the `TemplateBuddy`.
+Now you can use the fluent api of the `TemplateBuddy`.
 ```java
 public String get() {
     return templateBuddy
@@ -39,7 +39,7 @@ public String get() {
 }
 ```
 
-Or use it as a simple `RestTemplate`.
+Or use `RestTemplate` features.
 ```java
 public String get() {
     return templateBuddy
