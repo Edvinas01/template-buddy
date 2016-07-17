@@ -1,8 +1,9 @@
 package com.edd.rest;
 
 import org.junit.Test;
-import sun.net.www.protocol.http.HttpURLConnection;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.URL;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,7 +34,7 @@ public class BuddyRequestFactoryTest {
                         .build())
                 .toFactory();
 
-        HttpURLConnection connection = new HttpURLConnection(new URL("http://localhost:8080/abc/endpoint"), null);
+        HttpURLConnection connection = new MockConnection(new URL("http://localhost:8080/abc/endpoint"));
         factory.prepareConnection(connection, "GET");
 
         assertThat(connection.getRequestProperties().get(header)).contains(value1, value2);
@@ -72,15 +73,35 @@ public class BuddyRequestFactoryTest {
                         .build())
                 .toFactory();
 
-        HttpURLConnection connection = new HttpURLConnection(
+        HttpURLConnection connection = new MockConnection(
 
                 // Also test out url matching.
-                new URL("http://localhost:8080/123/endpoint/123"), null);
+                new URL("http://localhost:8080/123/endpoint/123"));
 
         factory.prepareConnection(connection, "GET");
 
         assertThat(connection.getRequestProperties().get(header)).contains(value1, value2);
         assertThat(connection.getConnectTimeout()).isEqualTo(connectTimeout);
         assertThat(connection.getReadTimeout()).isEqualTo(readTimeout);
+    }
+
+    private static class MockConnection extends HttpURLConnection {
+
+        MockConnection(URL u) {
+            super(u);
+        }
+
+        @Override
+        public void disconnect() {
+        }
+
+        @Override
+        public boolean usingProxy() {
+            return false;
+        }
+
+        @Override
+        public void connect() throws IOException {
+        }
     }
 }
