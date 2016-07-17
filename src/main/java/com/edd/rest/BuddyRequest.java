@@ -6,7 +6,10 @@ import com.edd.rest.api.TypedRequest;
 import com.edd.rest.api.executor.ConcreteRequestExecutor;
 import com.edd.rest.api.executor.GenericRequestExecutor;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -16,7 +19,7 @@ import java.net.URI;
 /**
  * Default implementation of the request api.
  */
-public class DefaultRequestBuilder implements Request, PayloadRequest {
+public class BuddyRequest implements Request, PayloadRequest {
 
     private static final ParameterizedTypeReference<Object> OBJECT_TYPE_REFERENCE =
             new ParameterizedTypeReference<Object>() {
@@ -36,7 +39,7 @@ public class DefaultRequestBuilder implements Request, PayloadRequest {
      * @param baseUrl       base request url.
      * @param uriVariables  base url uri variables.
      */
-    public DefaultRequestBuilder(TemplateBuddy templateBuddy, String baseUrl, Object... uriVariables) {
+    BuddyRequest(TemplateBuddy templateBuddy, String baseUrl, Object... uriVariables) {
         Assert.notNull(templateBuddy);
         Assert.notNull(baseUrl);
 
@@ -111,6 +114,11 @@ public class DefaultRequestBuilder implements Request, PayloadRequest {
                 .deleteForEntity();
     }
 
+    /**
+     * Request which is prepared for execution with a set response type.
+     *
+     * @param <R> response object type.
+     */
     private class Executor<R> implements GenericRequestExecutor<R>,
             ConcreteRequestExecutor<R>,
             TypedRequest<R> {
@@ -127,9 +135,6 @@ public class DefaultRequestBuilder implements Request, PayloadRequest {
 
             // Create uri from query params and base url.
             URI uri = uriComponentsBuilder.build().toUri();
-
-            // Get default headers and merge them with request headers.
-            headers.putAll(templateBuddy.getHttpHeaders());
 
             // Perform the request.
             return templateBuddy.exchange(uri, method,
