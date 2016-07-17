@@ -3,7 +3,7 @@ Template Buddy provides additional configuration features _(work in progress)_ a
 
 ## Build
 This library depends on [spring-boot-starter-web](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web).
-To build a runnable jar, navigate to project root directory and run the gradle `build` command using gradle wrapper.
+To build a jar for use in your project, navigate to root directory and run gradle `build` command using the gradle wrapper.
 ```bash
 ./gradlew build
 ```
