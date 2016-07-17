@@ -39,9 +39,12 @@ springBoot {
 }
 
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter-web')
+
+    // Requires spring boot dependency.
+    compileOnly('org.springframework.boot:spring-boot-starter-web')
 
     testCompile('org.assertj:assertj-core:3.5.1')
+    testCompile('org.springframework.boot:spring-boot-starter-web')
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 

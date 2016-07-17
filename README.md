@@ -1,10 +1,14 @@
-[![Build Status](https://travis-ci.org/Edvinas01/template-buddy.svg?branch=master)](https://travis-ci.org/Edvinas01/template-buddy)
-[![Coverage Status](https://coveralls.io/repos/github/Edvinas01/template-buddy/badge.svg?branch=master)](https://coveralls.io/github/Edvinas01/template-buddy?branch=master)
+## Template Buddy [![Build Status](https://travis-ci.org/Edvinas01/template-buddy.svg?branch=master)](https://travis-ci.org/Edvinas01/template-buddy) [![Coverage Status](https://coveralls.io/repos/github/Edvinas01/template-buddy/badge.svg?branch=master)](https://coveralls.io/github/Edvinas01/template-buddy?branch=master)
+Template Buddy provides additional configuration features _(work in progress)_ and a builder which uses fluent api for Spring `RestTemplate` class.
 
-## TemplateBuddy
-TemplateBuddy provides additional configuration features _(work in progress)_ and a builder which uses fluent api for Spring `RestTemplate` class.
+## Build
+This library depends on [spring-boot-starter-web](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web).
+To build a runnable jar, navigate to project root directory and run.
+```bash
+./gradlew build
+```
 
-## Usage
+## Examples
 First create a `TemplateBuddy` bean somewhere in your Spring application.
 ```java
 @Configuration
