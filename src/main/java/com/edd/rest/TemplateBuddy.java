@@ -1,7 +1,7 @@
 package com.edd.rest;
 
+import com.edd.rest.api.configuration.ConfigurationBuilder;
 import com.edd.rest.api.configuration.ConfigurationConfigurer;
-import com.edd.rest.api.configuration.GlobalConfigurationConfigurer;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.client.RestTemplate;
@@ -35,20 +35,20 @@ public class TemplateBuddy extends RestTemplate {
     }
 
     /**
-     * Create configuration configurer instance.
+     * Create configuration configurer instance which allows the customization of the template buddy.
      *
      * @return configuration configurer instance.
      */
-    public static GlobalConfigurationConfigurer configure() {
+    public static ConfigurationConfigurer configure() {
         return new BuddyConfigurationHolder(new AntPathMatcher());
     }
 
     /**
-     * Create a configuration instance.
+     * Create a new configuration instance.
      *
      * @return configuration instance.
      */
-    public static ConfigurationConfigurer configuration() {
+    public static ConfigurationBuilder configuration() {
         return new BuddyConfiguration();
     }
 }

@@ -37,17 +37,19 @@ public class TemplateBuddyTest {
 
     @Test
     public void getObject() {
-        server.expect(requestTo(String.format("%s/something?p1=1&p2=2", BASE_URL)))
+        server.expect(requestTo(String.format("%s/something/names/Some%%20Name?p1=1&p2=2", BASE_URL)))
                 .andExpect(method(HttpMethod.GET))
                 .andExpect(header("test", "test"))
                 .andRespond(withSuccess("{\"name\":\"tom\", \"age\":1}", MediaType.APPLICATION_JSON));
 
-        Person person = buddy.fromUrl("{url}/something", BASE_URL)
+        Person person = buddy.fromUrl(BASE_URL)
+                .path("/something")
+                .path("/names/{name}", "Some Name")
                 .param("p1", "1")
                 .param("p2", "2")
                 .header("test", "test")
                 .expect(Person.class)
-                .get();
+                .getForObject();
 
         assertThat(person.getName()).isEqualTo("tom");
         assertThat(person.getAge()).isEqualTo(1);
@@ -61,7 +63,7 @@ public class TemplateBuddyTest {
 
         String hello = buddy.fromUrl(BASE_URL)
                 .expect(String.class)
-                .post();
+                .postForObject();
 
         assertThat(hello).isEqualTo("hello");
     }
@@ -76,9 +78,9 @@ public class TemplateBuddyTest {
                     .andRespond(withSuccess());
         }
 
-        buddy.fromUrl(BASE_URL).get();
-        buddy.fromUrl(BASE_URL).post();
-        buddy.fromUrl(BASE_URL).delete();
+        buddy.fromUrl(BASE_URL).getForObject();
+        buddy.fromUrl(BASE_URL).postForObject();
+        buddy.fromUrl(BASE_URL).deleteForObject();
     }
 
     @Test
@@ -90,7 +92,7 @@ public class TemplateBuddyTest {
         ResponseEntity entity = buddy.fromUrl(BASE_URL)
                 .payload(new Person("tom", 1))
                 .method(HttpMethod.PUT)
-                .executeForEntity();
+                .execute();
 
         assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
     }

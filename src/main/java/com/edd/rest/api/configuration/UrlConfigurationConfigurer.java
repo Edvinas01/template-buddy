@@ -8,14 +8,14 @@ import org.springframework.http.client.ClientHttpRequestFactory;
 public interface UrlConfigurationConfigurer {
 
     /**
-     * Add url configuration.
+     * Create a new configuration instance for a specific url pattern.
      *
      * @param matcher       nonnull ant path matcher for the url.
      * @param configuration configuration for the url matcher.
-     * @return updated configurer.
+     * @return updated url configurer.
      */
-    UrlConfigurationConfigurer urlConfiguration(String matcher,
-                                                Configuration configuration);
+    UrlConfigurationConfigurer configurationFor(String matcher,
+                                                RequestConfiguration configuration);
 
     /**
      * Finalize configuration and create a http factory.

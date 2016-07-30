@@ -1,6 +1,6 @@
 package com.edd.rest;
 
-import com.edd.rest.api.configuration.Configuration;
+import com.edd.rest.api.configuration.RequestConfiguration;
 import com.edd.rest.api.configuration.ConfigurationHolder;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 
@@ -25,38 +25,48 @@ public class BuddyRequestFactory extends SimpleClientHttpRequestFactory {
         this.configurations = configurations;
     }
 
+    /**
+     * Get request factory configuration holder.
+     *
+     * @return configuration holder.
+     */
+    public ConfigurationHolder getConfigurations() {
+        return configurations;
+    }
+
     @Override
     protected void prepareConnection(HttpURLConnection connection,
                                      String httpMethod) throws IOException {
 
         super.prepareConnection(connection, httpMethod);
 
-        Configuration configuration = configurations.getUrlConfiguration(connection.getURL());
+        // Configure global settings first.
+        configureConnection(configurations.getGlobalRequestConfiguration(), connection);
 
-        // If url specific configuration was not found, try to use global.
-        if (configuration == null) {
-            configuration = configurations.getGlobalConfiguration();
+        // Configure per request settings.
+        configurations.getUrlConfiguration(connection.getURL())
+                .ifPresent(c -> configureConnection(c, connection));
+    }
+
+    private void configureConnection(RequestConfiguration configuration,
+                                     HttpURLConnection connection) {
+
+        // Only override connect timeout if its not null.
+        if (configuration.getConnectTimeout() != null) {
+            connection.setConnectTimeout(configuration.getConnectTimeout());
         }
 
-        // If global or url specific configuration was found.
-        if (configuration != null) {
+        // Only override read timeout if its not null.
+        if (configuration.getReadTimeout() != null) {
+            connection.setReadTimeout(configuration.getReadTimeout());
+        }
 
-            // Set connect and read timeouts only if specified.
-            if (configuration.getConnectTimeout() != null) {
-                connection.setConnectTimeout(configuration.getConnectTimeout());
-            }
+        // Add header values to the request.
+        for (Map.Entry<String, List<String>> entry :
+                configuration.getHttpHeaders().entrySet()) {
 
-            if (configuration.getReadTimeout() != null) {
-                connection.setReadTimeout(configuration.getReadTimeout());
-            }
-
-            // Add header values to the request. todo test how this works
-            for (Map.Entry<String, List<String>> entry :
-                    configuration.getHttpHeaders().entrySet()) {
-
-                for (String value : entry.getValue()) {
-                    connection.addRequestProperty(entry.getKey(), value);
-                }
+            for (String value : entry.getValue()) {
+                connection.addRequestProperty(entry.getKey(), value);
             }
         }
     }

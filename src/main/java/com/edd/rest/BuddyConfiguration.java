@@ -1,15 +1,15 @@
 package com.edd.rest;
 
-import com.edd.rest.api.configuration.Configuration;
-import com.edd.rest.api.configuration.ConfigurationConfigurer;
+import com.edd.rest.api.configuration.RequestConfiguration;
+import com.edd.rest.api.configuration.ConfigurationBuilder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.Assert;
 
 /**
  * Default implementation of generic request configuration.
  */
-public class BuddyConfiguration implements ConfigurationConfigurer,
-        Configuration {
+public class BuddyConfiguration implements ConfigurationBuilder,
+        RequestConfiguration {
 
     private final HttpHeaders httpHeaders = new HttpHeaders();
 
@@ -21,19 +21,19 @@ public class BuddyConfiguration implements ConfigurationConfigurer,
     }
 
     @Override
-    public ConfigurationConfigurer readTimeout(int readTimeout) {
+    public ConfigurationBuilder readTimeout(int readTimeout) {
         this.readTimeout = readTimeout;
         return this;
     }
 
     @Override
-    public ConfigurationConfigurer connectTimeout(int connectTimeout) {
+    public ConfigurationBuilder connectTimeout(int connectTimeout) {
         this.connectTimeout = connectTimeout;
         return this;
     }
 
     @Override
-    public ConfigurationConfigurer header(String name, String value) {
+    public ConfigurationBuilder header(String name, String value) {
         Assert.notNull(name);
         Assert.notNull(value);
 
@@ -42,7 +42,7 @@ public class BuddyConfiguration implements ConfigurationConfigurer,
     }
 
     @Override
-    public Configuration build() {
+    public RequestConfiguration build() {
         return this;
     }
 

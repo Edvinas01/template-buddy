@@ -52,6 +52,18 @@ public class BuddyRequest implements Request, PayloadRequest {
     }
 
     @Override
+    public Request path(String path, Object... uriVariables) {
+        Assert.notNull(path);
+
+        this.uriComponentsBuilder.path(templateBuddy
+                .getUriTemplateHandler()
+                .expand(path, uriVariables)
+                .getPath());
+
+        return this;
+    }
+
+    @Override
     public Request param(String name, Object... values) {
         Assert.notNull(name);
 
@@ -97,21 +109,21 @@ public class BuddyRequest implements Request, PayloadRequest {
     }
 
     @Override
-    public ResponseEntity postForEntity() {
+    public ResponseEntity post() {
         return new Executor<>(OBJECT_TYPE_REFERENCE)
-                .postForEntity();
+                .post();
     }
 
     @Override
-    public ResponseEntity getForEntity() {
+    public ResponseEntity get() {
         return new Executor<>(OBJECT_TYPE_REFERENCE)
-                .getForEntity();
+                .get();
     }
 
     @Override
-    public ResponseEntity deleteForEntity() {
+    public ResponseEntity delete() {
         return new Executor<>(OBJECT_TYPE_REFERENCE)
-                .deleteForEntity();
+                .delete();
     }
 
     /**
@@ -131,32 +143,36 @@ public class BuddyRequest implements Request, PayloadRequest {
         }
 
         @Override
-        public ResponseEntity<R> executeForEntity() {
+        public ResponseEntity<R> execute() {
 
             // Create uri from query params and base url.
             URI uri = uriComponentsBuilder.build().toUri();
 
             // Perform the request.
-            return templateBuddy.exchange(uri, method,
-                    new HttpEntity<>(payload, headers), reference);
+            return templateBuddy.exchange(uri,
+                    method,
+                    payload == null ?
+                            new HttpEntity<>(headers) :
+                            new HttpEntity<>(payload, headers),
+                    reference);
         }
 
         @Override
-        public ResponseEntity<R> postForEntity() {
+        public ResponseEntity<R> post() {
             return method(HttpMethod.POST)
-                    .executeForEntity();
+                    .execute();
         }
 
         @Override
-        public ResponseEntity<R> getForEntity() {
+        public ResponseEntity<R> get() {
             return method(HttpMethod.GET)
-                    .executeForEntity();
+                    .execute();
         }
 
         @Override
-        public ResponseEntity<R> deleteForEntity() {
+        public ResponseEntity<R> delete() {
             return method(HttpMethod.DELETE)
-                    .executeForEntity();
+                    .execute();
         }
 
         @Override

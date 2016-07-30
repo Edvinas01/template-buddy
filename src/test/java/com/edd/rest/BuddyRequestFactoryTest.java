@@ -25,7 +25,7 @@ public class BuddyRequestFactoryTest {
         factory = (BuddyRequestFactory) TemplateBuddy.configure()
 
                 // Testing if global configuration takes effect.
-                .globalConfiguration(TemplateBuddy
+                .configuration(TemplateBuddy
                         .configuration()
                         .connectTimeout(connectTimeout)
                         .readTimeout(readTimeout)
@@ -55,21 +55,29 @@ public class BuddyRequestFactoryTest {
         factory = (BuddyRequestFactory) TemplateBuddy.configure()
 
                 // Mix in global config which mimics url config.
-                .globalConfiguration(TemplateBuddy
+                .configuration(TemplateBuddy
                         .configuration()
                         .connectTimeout(connectTimeout + 1)
-                        .connectTimeout(readTimeout + 1)
-                        .header(header, value1 + "1")
-                        .header(header, value2 + "1")
+                        .readTimeout(readTimeout)
+                        .header(header, value1.toUpperCase())
+                        .header(header, value2.toUpperCase())
                         .build())
 
                 // Url configuration should not be overridden by global config.
-                .urlConfiguration("http://localhost:8080/**/endpoint/**", TemplateBuddy
+                .configurationFor("http://localhost:8080/**/endpoint/**", TemplateBuddy
                         .configuration()
+
+                        // Overrides connect timeout.
                         .connectTimeout(connectTimeout)
-                        .readTimeout(readTimeout)
                         .header(header, value1)
                         .header(header, value2)
+                        .build())
+
+                // Configuration that also matches the url.
+                .configurationFor("http://localhost:8080/**", TemplateBuddy
+                        .configuration()
+                        .connectTimeout(1)
+                        .readTimeout(1)
                         .build())
                 .toFactory();
 
@@ -80,7 +88,9 @@ public class BuddyRequestFactoryTest {
 
         factory.prepareConnection(connection, "GET");
 
-        assertThat(connection.getRequestProperties().get(header)).contains(value1, value2);
+        assertThat(connection.getRequestProperties().get(header))
+                .contains(value1.toUpperCase(), value2.toUpperCase(), value1, value2);
+
         assertThat(connection.getConnectTimeout()).isEqualTo(connectTimeout);
         assertThat(connection.getReadTimeout()).isEqualTo(readTimeout);
     }

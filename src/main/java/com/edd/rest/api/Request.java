@@ -13,6 +13,15 @@ public interface Request extends
         MethodDecider {
 
     /**
+     * Add additional path.
+     *
+     * @param path         url path.
+     * @param uriVariables path uri variables.
+     * @return updated simple request.
+     */
+    Request path(String path, Object... uriVariables);
+
+    /**
      * Add query param to request.
      *
      * @param name   nonnull parameter name.

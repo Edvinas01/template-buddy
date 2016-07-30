@@ -1,36 +1,16 @@
 package com.edd.rest.api.configuration;
 
-public interface ConfigurationConfigurer {
+/**
+ * Initial configuration interface, which allows the setting of global request configuration.
+ */
+public interface ConfigurationConfigurer extends UrlConfigurationConfigurer {
 
     /**
-     * Set read timeout.
+     * Set global request configuration settings, which will apply on all requests. Note that these settings can be
+     * overridden by url configuration settings.
      *
-     * @param readTimeout read timeout.
-     * @return updated configuration properties object.
+     * @param configuration nonnull global configuration settings.
+     * @return updated url configuration configurer.
      */
-    ConfigurationConfigurer readTimeout(int readTimeout);
-
-    /**
-     * Set connect timeout.
-     *
-     * @param connectTimeout connect timeout.
-     * @return updated configuration properties object.
-     */
-    ConfigurationConfigurer connectTimeout(int connectTimeout);
-
-    /**
-     * Add http header to header list for this configuration.
-     *
-     * @param name  nonnull header name.
-     * @param value nonnull header value.
-     * @return updated configuration properties object..
-     */
-    ConfigurationConfigurer header(String name, String value);
-
-    /**
-     * Finalize configuration properties.
-     *
-     * @return built configuration properties.
-     */
-    Configuration build();
+    UrlConfigurationConfigurer configuration(RequestConfiguration configuration);
 }

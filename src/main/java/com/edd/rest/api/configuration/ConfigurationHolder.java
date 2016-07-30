@@ -1,6 +1,7 @@
 package com.edd.rest.api.configuration;
 
 import java.net.URL;
+import java.util.Optional;
 
 /**
  * Holds global and per url request configuration settings.
@@ -10,15 +11,15 @@ public interface ConfigurationHolder {
     /**
      * Get global configuration settings.
      *
-     * @return global configuration settings or null if not set.
+     * @return global configuration settings, never null.
      */
-    Configuration getGlobalConfiguration();
+    RequestConfiguration getGlobalRequestConfiguration();
 
     /**
-     * Get configuration settings for this specific url.
+     * Get configuration settings which match this specific url.
      *
      * @param url nonnull url whose configuration settings to get.
-     * @return url configuration settings or null if they were not set.
+     * @return url configuration settings optional.
      */
-    Configuration getUrlConfiguration(URL url);
+    Optional<RequestConfiguration> getUrlConfiguration(URL url);
 }

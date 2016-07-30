@@ -5,7 +5,7 @@ import org.springframework.http.HttpHeaders;
 /**
  * Request configuration.
  */
-public interface Configuration {
+public interface RequestConfiguration {
 
     /**
      * Get http headers.

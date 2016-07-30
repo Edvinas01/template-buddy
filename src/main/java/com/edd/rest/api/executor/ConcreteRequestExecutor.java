@@ -10,33 +10,33 @@ import org.springframework.http.ResponseEntity;
 public interface ConcreteRequestExecutor<T> {
 
     /**
-     * Perform http post request.
-     *
-     * @return response entity.
-     */
-    ResponseEntity<T> postForEntity();
-
-    /**
      * Perform http get request.
      *
      * @return response entity.
      */
-    ResponseEntity<T> getForEntity();
+    ResponseEntity<T> get();
+
+    /**
+     * Perform http post request.
+     *
+     * @return response entity.
+     */
+    ResponseEntity<T> post();
 
     /**
      * Perform http delete request.
      *
      * @return response entity.
      */
-    ResponseEntity<T> deleteForEntity();
+    ResponseEntity<T> delete();
 
     /**
      * Perform http post request and extract the response object.
      *
      * @return object optional.
      */
-    default T post() {
-        return postForEntity().getBody();
+    default T postForObject() {
+        return post().getBody();
     }
 
     /**
@@ -44,8 +44,8 @@ public interface ConcreteRequestExecutor<T> {
      *
      * @return response object.
      */
-    default T get() {
-        return getForEntity().getBody();
+    default T getForObject() {
+        return get().getBody();
     }
 
     /**
@@ -53,7 +53,7 @@ public interface ConcreteRequestExecutor<T> {
      *
      * @return response object.
      */
-    default T delete() {
-        return deleteForEntity().getBody();
+    default T deleteForObject() {
+        return delete().getBody();
     }
 }

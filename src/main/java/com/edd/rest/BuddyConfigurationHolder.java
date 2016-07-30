@@ -6,58 +6,57 @@ import org.springframework.util.Assert;
 import org.springframework.util.PathMatcher;
 
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Default configuration holder.
  */
 public class BuddyConfigurationHolder implements ConfigurationHolder,
-        GlobalConfigurationConfigurer,
+        ConfigurationConfigurer,
         UrlConfigurationConfigurer {
 
-    private final Map<String, Configuration> urlConfigurations = new HashMap<>();
+    private final Map<String, RequestConfiguration> urlConfigurations = new LinkedHashMap<>();
     private final PathMatcher pathMatcher;
 
-    private Configuration globalConfiguration;
+    private RequestConfiguration globalRequestConfiguration;
 
     BuddyConfigurationHolder(PathMatcher pathMatcher) {
         this.pathMatcher = pathMatcher;
     }
 
-    @Override
-    public Configuration getGlobalConfiguration() {
-        return globalConfiguration;
+    public RequestConfiguration getGlobalRequestConfiguration() {
+        return globalRequestConfiguration;
     }
 
     @Override
-    public Configuration getUrlConfiguration(URL url) {
+    public Optional<RequestConfiguration> getUrlConfiguration(URL url) {
         Assert.notNull(url);
 
-        for (Map.Entry<String, Configuration> entry : urlConfigurations.entrySet()) {
+        // Collect all configurations that match the provided url.
+        for (Map.Entry<String, RequestConfiguration> entry : urlConfigurations.entrySet()) {
             if (pathMatcher.match(entry.getKey(), url.toString())) {
-                return entry.getValue();
+                return Optional.of(entry.getValue());
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override
-    public UrlConfigurationConfigurer globalConfiguration(Configuration globalConfiguration) {
-        Assert.notNull(globalConfiguration);
+    public UrlConfigurationConfigurer configuration(RequestConfiguration configuration) {
+        Assert.notNull(configuration);
 
-        this.globalConfiguration = globalConfiguration;
+        this.globalRequestConfiguration = configuration;
         return this;
     }
 
     @Override
-    public UrlConfigurationConfigurer urlConfiguration(String matcher,
-                                                       Configuration urlConfiguration) {
+    public UrlConfigurationConfigurer configurationFor(String matcher,
+                                                       RequestConfiguration configuration) {
 
         Assert.notNull(matcher);
-        Assert.notNull(urlConfiguration);
+        Assert.notNull(configuration);
 
-        this.urlConfigurations.put(matcher, urlConfiguration);
+        this.urlConfigurations.put(matcher, configuration);
         return this;
     }
 

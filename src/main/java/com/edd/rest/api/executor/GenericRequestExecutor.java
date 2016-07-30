@@ -14,14 +14,14 @@ public interface GenericRequestExecutor<T> {
      *
      * @return response entity.
      */
-    ResponseEntity<T> executeForEntity();
+    ResponseEntity<T> execute();
 
     /**
      * Execute a http request and get response object.
      *
      * @return response object.
      */
-    default T execute() {
-        return executeForEntity().getBody();
+    default T executeForObject() {
+        return execute().getBody();
     }
 }
